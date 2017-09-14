@@ -47,9 +47,8 @@ func (selector Selector) String() string {
 func (selector Selector) str(diff bool) string {
 	if diff {
 		return fmt.Sprintf("Selector: %s (%d, %d)", selector.Value, selector.Line, selector.Column)
-	} else {
-		return selector.Value
 	}
+	return selector.Value
 }
 
 // Rule represents a parsed CSS rule
@@ -253,6 +252,7 @@ func (rule *Rule) indentEndBlock() string {
 	return strings.Repeat(" ", rule.EmbedLevel*indentSpace)
 }
 
+// Sel returns all selectors' values
 func (rule *Rule) Sel() []string {
 	selectors := []string{}
 	for _, s := range rule.Selectors {
