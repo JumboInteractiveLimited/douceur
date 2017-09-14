@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/chris-ramon/douceur/css"
+	"github.com/avioli/douceur/css"
 )
 
 func MustParse(t *testing.T, txt string, nbRules int) *css.Stylesheet {
