@@ -18,9 +18,19 @@ const (
 	AtRule
 )
 
-// At Rules than have Rules inside their block instead of Declarations
-var atRulesWithRulesBlock = []string{
-	"@document", "@font-feature-values", "@keyframes", "@media", "@supports", "@-webkit-keyframes", "@-moz-keyframes", "@-o-keyframes",
+// Block Rules that have Rules inside their block instead of Declarations
+var blockRules = []string{
+	"@document",
+	"@font-feature-values",
+	"@keyframes",
+	"@media",
+	"@supports",
+	"@-webkit-keyframes",
+	"@-moz-keyframes",
+	"@-ms-keyframes",
+	"@-o-keyframes",
+	"from",
+	"to",
 }
 
 // Selector represents a parsed CSS selector.
@@ -87,7 +97,7 @@ func (kind RuleKind) String() string {
 // EmbedsRules returns true if this rule embeds another rules
 func (rule *Rule) EmbedsRules() bool {
 	if rule.Kind == AtRule {
-		for _, atRuleName := range atRulesWithRulesBlock {
+		for _, atRuleName := range blockRules {
 			if rule.Name == atRuleName {
 				return true
 			}
