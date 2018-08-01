@@ -6,7 +6,7 @@ A simple CSS parser and inliner in Golang.
 
 Parser is vaguely inspired by [CSS Syntax Module Level 3](http://www.w3.org/TR/css3-syntax) and [corresponding JS parser](https://github.com/tabatkins/parse-css).
 
-Inliner only parses CSS defined in HTML document, it *DOES NOT* fetch external stylesheets (for now).
+Inliner can parse embedded CSS from a HTML document, or can external stylesheet.
 
 Inliner inserts additional attributes when possible, for example:
 
@@ -44,6 +44,7 @@ The `bgcolor` attribute is inserted, in addition to the inlined `background-colo
 
 Install tool:
 
+    $ go get github.com/slt/douceur
     $ go install github.com/slt/douceur
 
 Parse a CSS file and display result:
@@ -53,6 +54,14 @@ Parse a CSS file and display result:
 Inline CSS in an HTML document and display result:
 
     $ douceur inline inputfile.html
+
+Can also read from standard input:
+
+    $ cat inputfile.html | douceur inline
+
+Inline an external CSS with a HTML document and display result:
+
+    $ douceur -ew inputfile.css inline inputfile.html
 
 
 ## Library usage
@@ -87,7 +96,7 @@ func main() {
 
     stylesheet, err := parser.Parse(input)
     if err != nil {
-        panic("Please fill a bug :)")
+        panic("Please file an issue :)")
     }
 
     fmt.Print(stylesheet.String())
@@ -138,7 +147,7 @@ func main() {
 
     html, err := inliner.Inline(input)
     if err != nil {
-        panic("Please fill a bug :)")
+        panic("Please file an issue :)")
     }
 
     fmt.Print(html)
