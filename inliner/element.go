@@ -32,24 +32,24 @@ func init() {
 	//   https://github.com/premailer/premailer/blob/master/lib/premailer/premailer.rb
 	styleToAttr = map[string]*ElementAttr{
 		"text-align": {
-			"align",
-			[]string{"h1", "h2", "h3", "h4", "h5", "h6", "p", "div", "blockquote", "tr", "th", "td"},
+			attr:     "align",
+			elements: []string{"h1", "h2", "h3", "h4", "h5", "h6", "p", "div", "blockquote", "tr", "th", "td"},
 		},
 		"background-color": {
-			"bgcolor",
-			[]string{"body", "table", "tr", "th", "td"},
+			attr:     "bgcolor",
+			elements: []string{"body", "table", "tr", "th", "td"},
 		},
 		"background-image": {
-			"background",
-			[]string{"table"},
+			attr:     "background",
+			elements: []string{"table"},
 		},
 		"vertical-align": {
-			"valign",
-			[]string{"th", "td"},
+			attr:     "valign",
+			elements: []string{"th", "td"},
 		},
 		"float": {
-			"align",
-			[]string{"img"},
+			attr:     "align",
+			elements: []string{"img"},
 		},
 		// @todo width and height ?
 	}

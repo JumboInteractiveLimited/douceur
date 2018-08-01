@@ -31,9 +31,6 @@ type Inliner struct {
 	// Parsed stylesheets
 	stylesheets []*css.Stylesheet
 
-	// Collected inlinable style rules
-	rules []*StyleRule
-
 	// HTML elements matching collected inlinable style rules
 	elements map[string]*Element
 
