@@ -51,7 +51,18 @@ func NewInliner(html string) *Inliner {
 
 // Inline inlines css into html document
 func Inline(html string) (string, error) {
-	result, err := NewInliner(html).Inline()
+	return InlineWithExternalCSS(html, "")
+}
+
+// InlineWithExternalCSS Includes external css
+func InlineWithExternalCSS(html string, css string) (string, error) {
+	inliner := NewInliner(html)
+	err := inliner.parseStylesheet(css)
+	if err != nil {
+		return "", err
+	}
+
+	result, err := inliner.Inline()
 	if err != nil {
 		return "", err
 	}
@@ -103,13 +114,10 @@ func (inliner *Inliner) parseStylesheets() error {
 	var result error
 
 	inliner.doc.Find("style").EachWithBreak(func(i int, s *goquery.Selection) bool {
-		stylesheet, err := parser.Parse(s.Text())
-		if err != nil {
-			result = err
+		result = inliner.parseStylesheet(s.Text())
+		if result != nil {
 			return false
 		}
-
-		inliner.stylesheets = append(inliner.stylesheets, stylesheet)
 
 		// removes parsed stylesheet
 		s.Remove()
@@ -118,6 +126,17 @@ func (inliner *Inliner) parseStylesheets() error {
 	})
 
 	return result
+}
+
+func (inliner *Inliner) parseStylesheet(s string) error {
+	stylesheet, err := parser.Parse(s)
+	if err != nil {
+		return err
+	}
+
+	inliner.stylesheets = append(inliner.stylesheets, stylesheet)
+
+	return nil
 }
 
 // Collects HTML elements matching parsed stylesheets, and thus collect used style rules

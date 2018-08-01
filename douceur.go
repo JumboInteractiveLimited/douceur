@@ -17,10 +17,12 @@ const (
 
 var (
 	flagVersion bool
+	cssPath     string
 )
 
 func init() {
 	flag.BoolVar(&flagVersion, "version", false, "Display version")
+	flag.StringVar(&cssPath, "es", "", "Include external stylesheet when inlining")
 }
 
 func main() {
@@ -43,7 +45,7 @@ func main() {
 	case "parse":
 		parseCSS(flag.Arg(1))
 	case "inline":
-		inlineCSS(flag.Arg(1))
+		inlineCSS(flag.Arg(1), cssPath)
 	default:
 		fmt.Println("Unexpected action: ", action)
 		usage()
@@ -70,10 +72,15 @@ func parseCSS(filePath string) {
 }
 
 // inlines CSS into HTML and display result
-func inlineCSS(filePath string) {
-	input := read(filePath)
+func inlineCSS(filePath string, cssPath string) {
+	htmlInput := string(read(filePath))
+	cssInput := ""
 
-	output, err := inliner.Inline(string(input))
+	if cssPath != "" {
+		cssInput = string(readFile(cssPath))
+	}
+
+	output, err := inliner.InlineWithExternalCSS(htmlInput, cssInput)
 	if err != nil {
 		fmt.Println("Inlining error: ", err)
 		os.Exit(1)
