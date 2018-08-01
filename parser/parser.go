@@ -8,7 +8,7 @@ import (
 
 	"github.com/gorilla/css/scanner"
 
-	"github.com/avioli/douceur/css"
+	"github.com/slt/douceur/css"
 )
 
 const (

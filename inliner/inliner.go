@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/avioli/douceur/css"
-	"github.com/avioli/douceur/parser"
+	"github.com/slt/douceur/css"
+	"github.com/slt/douceur/parser"
 	"golang.org/x/net/html"
 )
 

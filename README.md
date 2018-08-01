@@ -2,7 +2,7 @@
 
 A simple CSS parser and inliner in Golang.
 
-![Douceur Logo](https://github.com/chris-ramon/douceur/blob/master/douceur.png?raw=true "Douceur")
+![Douceur Logo](https://github.com/slt/douceur/blob/master/douceur.png?raw=true "Douceur")
 
 Parser is vaguely inspired by [CSS Syntax Module Level 3](http://www.w3.org/TR/css3-syntax) and [corresponding JS parser](https://github.com/tabatkins/parse-css).
 
@@ -44,7 +44,7 @@ The `bgcolor` attribute is inserted, in addition to the inlined `background-colo
 
 Install tool:
 
-    $ go install github.com/chris-ramon/douceur
+    $ go install github.com/slt/douceur
 
 Parse a CSS file and display result:
 
@@ -59,7 +59,7 @@ Inline CSS in an HTML document and display result:
 
 Fetch package:
 
-    $ go get github.com/chris-ramon/douceur
+    $ go get github.com/slt/douceur
 
 
 ### Parse CSS
@@ -70,7 +70,7 @@ package main
 import (
     "fmt"
 
-    "github.com/chris-ramon/douceur/parser"
+    "github.com/slt/douceur/parser"
 )
 
 func main() {
@@ -114,7 +114,7 @@ package main
 import (
     "fmt"
 
-    "github.com/chris-ramon/douceur/inliner"
+    "github.com/slt/douceur/inliner"
 )
 
 func main() {
