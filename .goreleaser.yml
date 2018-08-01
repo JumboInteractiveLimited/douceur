@@ -20,3 +20,7 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+release:
+  github:
+    owner: slt
+    name: douceur
