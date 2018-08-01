@@ -90,7 +90,6 @@ func inlineCSS(filePath string, cssPath string) {
 }
 
 func read(filePath string) []byte {
-	fmt.Println(filePath)
 	if filePath == "" {
 		return readStandardInput()
 	}
