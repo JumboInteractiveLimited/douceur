@@ -31,37 +31,34 @@ func main() {
 		os.Exit(0)
 	}
 
-	args := flag.Args()
+	action := flag.Arg(0)
 
-	if len(args) == 0 {
-		fmt.Println("No command supplied")
+	if action == "" {
+		fmt.Println("No action supplied")
+		usage()
 		os.Exit(1)
 	}
 
-	switch args[0] {
+	switch action {
 	case "parse":
-		if len(args) < 2 {
-			fmt.Println("Missing file path")
-			os.Exit(1)
-		}
-
-		parseCSS(args[1])
+		parseCSS(flag.Arg(1))
 	case "inline":
-		if len(args) < 2 {
-			fmt.Println("Missing file path")
-			os.Exit(1)
-		}
-
-		inlineCSS(args[1])
+		inlineCSS(flag.Arg(1))
 	default:
-		fmt.Println("Unexpected command: ", args[0])
+		fmt.Println("Unexpected action: ", action)
+		usage()
 		os.Exit(1)
 	}
 }
 
+func usage() {
+	fmt.Printf("Usage: %s %s %s\n", os.Args[0], "(parse|inline)", "/path/to/file")
+	fmt.Printf("Usage: %s %s < %s\n", os.Args[0], "(parse|inline)", "/path/to/file")
+}
+
 // parse and display CSS file
 func parseCSS(filePath string) {
-	input := readFile(filePath)
+	input := read(filePath)
 
 	stylesheet, err := parser.Parse(string(input))
 	if err != nil {
@@ -74,7 +71,7 @@ func parseCSS(filePath string) {
 
 // inlines CSS into HTML and display result
 func inlineCSS(filePath string) {
-	input := readFile(filePath)
+	input := read(filePath)
 
 	output, err := inliner.Inline(string(input))
 	if err != nil {
@@ -85,6 +82,14 @@ func inlineCSS(filePath string) {
 	fmt.Println(output)
 }
 
+func read(filePath string) []byte {
+	fmt.Println(filePath)
+	if filePath == "" {
+		return readStandardInput()
+	}
+	return readFile(filePath)
+}
+
 func readFile(filePath string) []byte {
 	file, err := ioutil.ReadFile(filePath)
 	if err != nil {
@@ -93,4 +98,14 @@ func readFile(filePath string) []byte {
 	}
 
 	return file
+}
+
+func readStandardInput() []byte {
+	data, err := ioutil.ReadAll(os.Stdin)
+	if err != nil {
+		fmt.Println("Failed read stdin: ", err)
+		os.Exit(1)
+	}
+
+	return data
 }
