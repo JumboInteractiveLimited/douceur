@@ -207,6 +207,15 @@ func (parser *Parser) ParseDeclaration() (*css.Declaration, error) {
 		}
 	}
 
+	// Inline styles won't have a trailing semicolon or brace
+	if parser.tokenEOF() && result.Property != "" && result.Value == "" {
+		if importantRegexp.MatchString(curValue) {
+			result.Important = true
+			curValue = importantRegexp.ReplaceAllString(curValue, "")
+		}
+		result.Value = strings.TrimSpace(curValue)
+	}
+
 	// log.Printf("[parsed] Declaration: %s", result.String())
 
 	return result, parser.err()

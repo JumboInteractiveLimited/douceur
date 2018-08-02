@@ -104,7 +104,7 @@ func TestInlineStylePriority(t *testing.T) {
 </style>
   </head>
   <body>
-    <p style="color: #222;">
+    <p style="color: #222; font-weight: bold">
       Inline me please!
     </p>
 </body>
@@ -115,7 +115,7 @@ func TestInlineStylePriority(t *testing.T) {
 
   </head>
   <body>
-    <p style="color: #222; font-family: &#39;Helvetica Neue&#39;, Verdana, sans-serif;">
+    <p style="color: #222; font-family: &#39;Helvetica Neue&#39;, Verdana, sans-serif; font-weight: bold;">
       Inline me please!
     </p>
 
