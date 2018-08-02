@@ -68,7 +68,7 @@ func (element *Element) addStyleRule(styleRule *StyleRule) {
 }
 
 // Inline styles on element
-func (element *Element) inline() error {
+func (element *Element) inline(inlineAttributes bool) error {
 	// compute declarations
 	declarations, err := element.computeDeclarations()
 	if err != nil {
@@ -82,7 +82,9 @@ func (element *Element) inline() error {
 	}
 
 	// set additionnal attributes
-	element.setAttributesFromStyle(declarations)
+	if inlineAttributes {
+		element.setAttributesFromStyle(declarations)
+	}
 
 	return nil
 }

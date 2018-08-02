@@ -47,7 +47,7 @@ func TestInliner(t *testing.T) {
 }
 
 // Simple rule inlining with two declarations
-func TestInlineWithExternalCSS(t *testing.T) {
+func TestParseStylesheet(t *testing.T) {
 	input := `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -74,7 +74,13 @@ func TestInlineWithExternalCSS(t *testing.T) {
   
 </body></html>`
 
-	output, err := InlineWithExternalCSS(input, cssInput)
+	instance := NewInliner(input)
+	err := instance.ParseStylesheet(cssInput)
+	if err != nil {
+		t.Fatal("Failed to inline html:", err)
+	}
+
+	output, err := instance.Inline()
 	if err != nil {
 		t.Fatal("Failed to inline html:", err)
 	}

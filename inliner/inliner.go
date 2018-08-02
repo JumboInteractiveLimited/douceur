@@ -25,6 +25,9 @@ type Inliner struct {
 	// Raw HTML
 	html string
 
+	// Add obsolete attributes for older clients
+	inlineAttributes bool
+
 	// Parsed HTML document
 	doc *goquery.Document
 
@@ -44,30 +47,16 @@ type Inliner struct {
 // NewInliner instanciates a new Inliner
 func NewInliner(html string) *Inliner {
 	return &Inliner{
-		html:     html,
-		elements: make(map[string]*Element),
+		html:             html,
+		elements:         make(map[string]*Element),
+		inlineAttributes: true,
 	}
 }
 
 // Inline inlines css into html document
 func Inline(html string) (string, error) {
-	return InlineWithExternalCSS(html, "")
-}
-
-// InlineWithExternalCSS Includes external css
-func InlineWithExternalCSS(html string, css string) (string, error) {
 	inliner := NewInliner(html)
-	err := inliner.parseStylesheet(css)
-	if err != nil {
-		return "", err
-	}
-
-	result, err := inliner.Inline()
-	if err != nil {
-		return "", err
-	}
-
-	return result, nil
+	return inliner.Inline()
 }
 
 // Inline inlines CSS and returns HTML
@@ -97,6 +86,11 @@ func (inliner *Inliner) Inline() (string, error) {
 	return inliner.genHTML()
 }
 
+// InlineAttributes sets if the inliner should inline attributes
+func (inliner *Inliner) InlineAttributes(val bool) {
+	inliner.inlineAttributes = val
+}
+
 // Parses raw html
 func (inliner *Inliner) parseHTML() error {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(inliner.html))
@@ -114,7 +108,7 @@ func (inliner *Inliner) parseStylesheets() error {
 	var result error
 
 	inliner.doc.Find("style").EachWithBreak(func(i int, s *goquery.Selection) bool {
-		result = inliner.parseStylesheet(s.Text())
+		result = inliner.ParseStylesheet(s.Text())
 		if result != nil {
 			return false
 		}
@@ -128,7 +122,8 @@ func (inliner *Inliner) parseStylesheets() error {
 	return result
 }
 
-func (inliner *Inliner) parseStylesheet(s string) error {
+// ParseStylesheet parses a stylesheet for inlining.
+func (inliner *Inliner) ParseStylesheet(s string) error {
 	stylesheet, err := parser.Parse(s)
 	if err != nil {
 		return err
@@ -188,7 +183,7 @@ func (inliner *Inliner) inlineStyleRules() error {
 		element.elt.RemoveAttr(eltMarkerAttr)
 
 		// inline element
-		err := element.inline()
+		err := element.inline(inliner.inlineAttributes)
 		if err != nil {
 			return err
 		}

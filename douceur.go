@@ -12,17 +12,19 @@ import (
 
 const (
 	// Version is package version
-	Version = "0.3.1"
+	Version = "0.3.2"
 )
 
 var (
-	flagVersion bool
-	cssPath     string
+	flagVersion  bool
+	noAttributes bool
+	cssPath      string
 )
 
 func init() {
 	flag.BoolVar(&flagVersion, "version", false, "Display version")
-	flag.StringVar(&cssPath, "es", "", "Include external stylesheet when inlining")
+	flag.BoolVar(&noAttributes, "n", false, "Don't inline obsolete attributes like bgcolor & valign")
+	flag.StringVar(&cssPath, "c", "", "Include external stylesheet when inlining")
 }
 
 func main() {
@@ -54,6 +56,7 @@ func main() {
 }
 
 func usage() {
+	fmt.Printf("Help: %s -h", os.Args[0])
 	fmt.Printf("Usage: %s %s %s\n", os.Args[0], "(parse|inline)", "/path/to/file")
 	fmt.Printf("Usage: %s %s < %s\n", os.Args[0], "(parse|inline)", "/path/to/file")
 }
@@ -74,13 +77,19 @@ func parseCSS(filePath string) {
 // inlines CSS into HTML and display result
 func inlineCSS(filePath string, cssPath string) {
 	htmlInput := string(read(filePath))
-	cssInput := ""
+	instance := inliner.NewInliner(htmlInput)
 
 	if cssPath != "" {
-		cssInput = string(readFile(cssPath))
+		cssInput := string(readFile(cssPath))
+		err := instance.ParseStylesheet(cssInput)
+		if err != nil {
+			fmt.Println("Inlining error: ", err)
+			os.Exit(1)
+		}
 	}
 
-	output, err := inliner.InlineWithExternalCSS(htmlInput, cssInput)
+	instance.InlineAttributes(!noAttributes)
+	output, err := instance.Inline()
 	if err != nil {
 		fmt.Println("Inlining error: ", err)
 		os.Exit(1)
