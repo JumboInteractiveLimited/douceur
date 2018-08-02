@@ -1,4 +1,4 @@
-# douceur [![Build Status](https://api.travis-ci.org/chris-ramon/douceur.svg?branch=master)](https://travis-ci.org/chris-ramon/douceur)
+# douceur [![Build Status](https://api.travis-ci.org/slt/douceur.svg?branch=master)](https://travis-ci.org/slt/douceur)
 
 A simple CSS parser and inliner in Golang.
 
@@ -173,6 +173,9 @@ Displays:
 
     go test ./... -v
 
+
+## Forked
+  - This is forked from the original [douceur](https://github.com/aymerick/douceur)
 
 ## Dependencies
 
