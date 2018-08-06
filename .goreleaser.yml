@@ -22,5 +22,5 @@ changelog:
     - '^test:'
 release:
   github:
-    owner: slt
+    owner: JumboInteractiveLimited
     name: douceur
